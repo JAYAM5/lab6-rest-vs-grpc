@@ -10,7 +10,6 @@ import jsonpickle
 import random
 import argparse
 
-
 def doRawImage(addr, debug=False):
 
     # prepare headers for http request
@@ -41,11 +40,50 @@ def doAdd(addr, debug=False):
 
 
 def doDotProduct(addr, debug=False):
-    pass
+    headers = {'content-type': 'application/json'}
+
+    #send http request with lists and receive response
+    dot_url = addr + '/api/dotproduct'
+
+    list_a = [random.random() for _ in range(100)]
+    list_b = [random.random() for _ in range(100)]
+
+    data = {
+            "a": list_a,
+            "b": list_b
+            }
+
+    response = requests.post(dot_url, headers=headers,json=data)
+
+    if debug:
+        print("Response is", response)
+        print(json.loads(response.text))
+
+
 
 
 def doJsonImage(addr, debug=False):
-    pass
+
+    # prepare headers for http request
+    headers = {'content-type': 'application/json'}
+
+    img = open('Flatirons_Winter_Sunrise_edit_2.jpg', 'rb').read()
+    encoded = base64.b64encode(img).decode('utf-8')
+
+    data = {
+            "image": encoded
+            }
+
+    # send http request with image and receive response
+    image_url = addr + '/api/jsonimage'
+    response = requests.post(image_url, json=data, headers=headers)
+
+    if debug:
+        print("Response is", response)
+        print(json.loads(response.text))
+
+
+
 
 
 # ---------------------------------------------------------
